@@ -39,14 +39,22 @@ to quickly create a Cobra application.`,
 		})
 
 		if err != nil {
-			log.Fatalf("Please check TELE_TOKEN env variable. %s, err")
+			log.Fatalf("Please check TELE_TOKEN env variable. %s", err)
+			return
 		}
 
 		kbot.Handle(telebot.OnText, func(m telebot.Context) error {
 
 			log.Print(m.Message().Payload, m.Text())
+			payload := m.Message().Payload
+
+			switch payload {
+			case "hello":
+				err = m.Send(fmt.Sprintf("Hello I'm kbot %s!", appVersion))
+			}
 
 			return err
+
 		})
 
 		kbot.Start()
